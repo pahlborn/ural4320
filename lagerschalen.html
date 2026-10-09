@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-size:14px;font-family:system-ui,-apple-system,sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Lagerschalen KamAZ-740</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: Teile-Dossier — Befund oben, darunter Händler-Kartei nach Versandstatus, dann Maß- und Teilenummern-Referenz */
+:root{
+  --bg:#eceff1;
+  --surface:#ffffff;
+  --ink:#1b2025;
+  --muted:#5a636c;
+  --line:#d2d8dd;
+  --steel:#8a949d;
+  --bronze:#9b5a1c;
+  --bronze-soft:#f3e6d8;
+  --ok:#2c7a4b; --ok-soft:#e1f1e7;
+  --warn:#9a6300; --warn-soft:#f8ecd2;
+  --bad:#a33a3a; --bad-soft:#f6e1e1;
+  --idle:#5f6973; --idle-soft:#e6e9ec;
+  --font-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --font-body:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --r:6px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121518; --surface:#1b1f23; --ink:#e5e9ec; --muted:#9ba5ae; --line:#2d3439;
+    --steel:#6d7882; --bronze:#d9944c; --bronze-soft:#3a2b1d;
+    --ok:#62c18b; --ok-soft:#173326; --warn:#e2a93f; --warn-soft:#3a2c12;
+    --bad:#e47f7f; --bad-soft:#3c1d1d; --idle:#a3adb6; --idle-soft:#262c31;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121518; --surface:#1b1f23; --ink:#e5e9ec; --muted:#9ba5ae; --line:#2d3439;
+  --steel:#6d7882; --bronze:#d9944c; --bronze-soft:#3a2b1d;
+  --ok:#62c18b; --ok-soft:#173326; --warn:#e2a93f; --warn-soft:#3a2c12;
+  --bad:#e47f7f; --bad-soft:#3c1d1d; --idle:#a3adb6; --idle-soft:#262c31;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--font-body)}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:18px;padding-block:28px 72px;display:grid;gap:40px}
+a{color:var(--bronze);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible+label,.chip:focus-visible{outline:2px solid var(--bronze);outline-offset:2px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(2.2rem,6vw,3.4rem);font-weight:700;letter-spacing:.005em}
+h2{font-size:1.7rem;font-weight:600}
+h3{font-size:1.3rem;font-weight:600}
+p{margin:0;max-width:68ch}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--font-display);font-weight:600;font-size:.95rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+
+/* Kopf */
+header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;border-bottom:2px solid var(--ink);padding-bottom:20px}
+header.top .meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:12px;color:var(--muted);font-size:.95rem}
+header.top .meta b{color:var(--ink);font-weight:600}
+.shell{width:220px;max-width:100%;height:auto}
+.shell .steel{fill:var(--steel)}
+.shell .lining{fill:var(--bronze)}
+.shell .dim{stroke:var(--ink);stroke-width:1.2;fill:none}
+.shell .dimhead{fill:var(--ink)}
+.shell text{fill:var(--ink);font-family:var(--font-mono);font-size:13px;font-weight:600}
+.shell .lbl{fill:var(--muted);font-family:var(--font-body);font-size:11px;font-weight:400}
+
+/* Befund */
+.finding{display:grid;gap:16px}
+.finding .lede{font-size:1.15rem;max-width:62ch}
+.claims{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.claims li{display:grid;grid-template-columns:7.6rem minmax(0,1fr);gap:12px;align-items:baseline;padding:10px 0;border-top:1px solid var(--line)}
+.tag{display:inline-block;font-family:var(--font-mono);font-size:.74rem;font-weight:600;padding:2px 7px;border-radius:3px;white-space:nowrap;justify-self:start}
+.tag.s{background:var(--ok-soft);color:var(--ok)}
+.tag.w{background:var(--warn-soft);color:var(--warn)}
+.tag.v{background:var(--idle-soft);color:var(--idle);outline:1px dashed var(--idle);outline-offset:-1px}
+.consequence{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:6px}
+.consequence strong{font-family:var(--font-display);font-size:1.2rem;font-weight:600}
+
+/* Filter */
+.ledger-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:14px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{font:600 .9rem var(--font-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip:hover{border-color:var(--ink)}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.92rem;color:var(--muted);padding-left:6px}
+.toggle input{accent-color:var(--bronze);width:16px;height:16px}
+
+/* Händlerkarten */
+.ledger{display:grid;gap:14px}
+.sup{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);display:grid;grid-template-columns:4.4rem minmax(0,1fr) minmax(0,17rem);gap:0}
+.sup .cc{font-family:var(--font-mono);font-weight:600;font-size:1.25rem;color:var(--muted);padding:18px 0 18px 18px}
+.sup .body{padding:16px 18px;display:grid;gap:10px;min-width:0}
+.sup .side{padding:16px 18px;border-left:1px solid var(--line);display:grid;gap:12px;align-content:start;min-width:0}
+.sup .name{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.sup .name .co{color:var(--muted);font-size:.92rem}
+.offer{margin:0;display:grid;grid-template-columns:minmax(6.5rem,max-content) minmax(0,1fr);gap:4px 14px;font-size:.95rem}
+.offer dt{color:var(--muted)}
+.offer dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.price{font-family:var(--font-mono);font-weight:600;font-variant-numeric:tabular-nums}
+.pill{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:.85rem;padding:3px 10px;border-radius:999px;justify-self:start}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.eu{background:var(--ok-soft);color:var(--ok)}
+.pill.inland{background:var(--warn-soft);color:var(--warn)}
+.pill.offen{background:var(--idle-soft);color:var(--idle)}
+.origin{font-size:.85rem;font-weight:600;padding:2px 8px;border-radius:3px;justify-self:start}
+.origin.ru{background:var(--bad-soft);color:var(--bad)}
+.origin.nru{background:var(--ok-soft);color:var(--ok)}
+.origin.unk{background:var(--idle-soft);color:var(--idle)}
+.contact{display:grid;gap:6px;font-size:.92rem}
+.contact .row{display:flex;gap:8px;align-items:center;justify-content:space-between;min-width:0}
+.contact .val{font-family:var(--font-mono);font-size:.85rem;user-select:all;overflow-wrap:anywhere;min-width:0}
+.copy{font:600 .78rem var(--font-body);background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 8px;cursor:pointer;flex:none}
+.copy:hover{color:var(--ink);border-color:var(--ink)}
+.next{font-size:.92rem;border-top:1px dashed var(--line);padding-top:10px}
+.next b{font-weight:600}
+.links{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.88rem}
+.empty{padding:20px;text-align:left;color:var(--muted);border:1px dashed var(--line);border-radius:var(--r)}
+
+/* weitere UA */
+.more{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:10px}
+.more ul{margin:0;padding-left:1.1rem;display:grid;gap:6px;font-size:.95rem}
+
+/* Referenz */
+.ref{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:12px;align-content:start;min-width:0}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;padding:7px 10px 7px 0;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--font-display);font-weight:600;font-size:1rem;letter-spacing:.03em;color:var(--muted)}
+td.mono{white-space:nowrap}
+.warnline{background:var(--warn-soft);color:var(--ink);border-radius:4px;padding:10px 12px;font-size:.93rem}
+
+/* Vorlage */
+.tpl{display:grid;gap:14px}
+.tpl-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tpl pre{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;white-space:pre-wrap;font:15px/1.6 var(--font-body);overflow-wrap:anywhere}
+.tpl .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{font:600 .92rem var(--font-body);background:var(--bronze);color:var(--surface);border:0;border-radius:4px;padding:8px 16px;cursor:pointer}
+.status{font-size:.9rem;color:var(--ok)}
+
+/* Route */
+.route{display:grid;gap:12px}
+.steps{margin:0;padding-left:1.3rem;display:grid;gap:8px;max-width:72ch}
+
+/* Quellen */
+.sources ol{margin:0;padding-left:1.4rem;display:grid;gap:4px;font-size:.88rem;color:var(--muted)}
+.sources a{overflow-wrap:anywhere}
+footer{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+
+@media (max-width:820px){
+  .sup{grid-template-columns:3.4rem minmax(0,1fr)}
+  .sup .side{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}
+}
+@media (max-width:560px){
+  header.top{grid-template-columns:1fr}
+  .shell{width:170px}
+  .claims li{grid-template-columns:1fr;gap:4px}
+  .sup{grid-template-columns:1fr}
+  .sup .cc{padding:14px 18px 0}
+  .offer{grid-template-columns:1fr;gap:0}
+  .offer dd{margin-bottom:6px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+
+<header class="top">
+  <div>
+    <div class="eyebrow">Ural-4320 · Motor KamAZ-740 · Bezugsquellen Europa</div>
+    <h1>Lagerschalen KamAZ-740</h1>
+    <p class="muted" style="margin-top:8px">Hauptlager <span class="mono">7405.1000102</span> und Pleuellager <span class="mono">7405.1000104</span>, Normalmaß (Р0 / СТ), Lieferziel Deutschland.</p>
+    <div class="meta"><span>Stand <b>09.10.2026</b></span><span>Gelistet <b><span id="countAll">0</span> Händler in 6 Ländern</b></span><span>Mit Normalmaß im Shop <b>3</b></span></div>
+  </div>
+  <svg class="shell" viewBox="0 0 220 150" role="img" aria-label="Schema einer Lagerschale: Stahlrücken mit Bronze-Laufschicht, Zapfendurchmesser 95,00 mm">
+    <path class="steel" d="M10 100 A100 100 0 0 1 210 100 L201 100 A91 91 0 0 0 19 100 Z"/>
+    <path class="lining" d="M19 100 A91 91 0 0 1 201 100 L196 100 A86 86 0 0 0 24 100 Z"/>
+    <line class="dim" x1="24" y1="118" x2="196" y2="118"/>
+    <line class="dim" x1="24" y1="104" x2="24" y2="124"/>
+    <line class="dim" x1="196" y1="104" x2="196" y2="124"/>
+    <path class="dimhead" d="M24 118 l8 -3.5 v7 z M196 118 l-8 -3.5 v7 z"/>
+    <text x="110" y="138" text-anchor="middle">Ø 95,00</text>
+    <text class="lbl" x="110" y="64" text-anchor="middle">Zapfen Hauptlager, Р0</text>
+  </svg>
+</header>
+
+<section class="finding" aria-labelledby="h-befund">
+  <div class="eyebrow">Befund</div>
+  <h2 id="h-befund">Warum bisher niemand liefert</h2>
+  <p class="lede">Die meisten gelisteten Sätze stammen aus Russland (ДЗВ Dimitrowgrad, Daido Metal Rus) und tragen teils ein KAMAZ-Etikett. Das schreckt EU-Händler und Paketdienste ab, auch wenn die Lagerschalen selbst nach meiner Prüfung nicht unter das Einfuhrverbot fallen.</p>
+  <ul class="claims">
+    <li><span class="tag s">[Sicher]</span><span>Die PJSC KAMAZ steht seit 2022 auf der EU-Sanktionsliste (Verordnung 269/2014, Vermögenseinfrierung). Ware, die über KAMAZ-Strukturen vertrieben wird, ist für EU-Firmen ein Compliance-Risiko.</span></li>
+    <li><span class="tag s">[Sicher]</span><span>Das Einfuhrverbot nach Art. 3i der Verordnung 833/2014 gilt laut EuGH für <em>alle</em> Waren, deren KN-Code in Anhang XXI steht, ohne Prüfung im Einzelfall.</span></li>
+    <li><span class="tag w">[Wahrscheinlich]</span><span>Gleitlagerschalen (KN <span class="mono">8483 30 80</span>) stehen nicht in Anhang XXI: Der TARIC-Eintrag nennt für diese Nummer keine Einfuhrmaßnahme gegen Russland, nur Ausfuhrkontrollen Richtung Russland.</span></li>
+    <li><span class="tag s">[Sicher]</span><span>Ihr Foto von shop.uazbg.com zeigt ДЗВ-Pleuellager <span class="mono">740.60Д-1000104</span> mit KAMAZ-Etikett auf der Packung.</span></li>
+    <li><span class="tag v">[Vermutung]</span><span>Händler lehnen pauschal ab, weil Compliance-Abteilungen Ware russischen Ursprungs nicht einzeln prüfen. Bestätigt hat mir das keiner der Shops.</span></li>
+  </ul>
+  <div class="consequence">
+    <strong>Was daraus folgt</strong>
+    <p>Fragen Sie gezielt nach Sätzen nicht-russischer Herstellung (FORSO, Federal-Mogul-Lizenz aus China) und lassen Sie sich das Ursprungsland schriftlich nennen. Das nimmt dem Händler und dem Paketdienst den Grund zur Ablehnung. Verbindlich zur Einfuhr äußert sich nur die Zentrale Auskunft des Zolls; das hier ist kein Rechtsrat.</p>
+  </div>
+</section>
+
+<section aria-labelledby="h-haendler" style="display:grid;gap:16px">
+  <div class="ledger-head">
+    <div style="display:grid;gap:6px">
+      <div class="eyebrow">Händler-Kartei</div>
+      <h2 id="h-haendler">Anbieter nach Versandstatus</h2>
+    </div>
+    <div class="filters" role="group" aria-label="Händler filtern">
+      <button class="chip" data-f="all" aria-pressed="true" type="button">Alle</button>
+      <button class="chip" data-f="eu" aria-pressed="false" type="button">Versand EU</button>
+      <button class="chip" data-f="inland" aria-pressed="false" type="button">Nur Inland</button>
+      <button class="chip" data-f="offen" aria-pressed="false" type="button">Ungeklärt</button>
+      <label class="toggle" for="noRu"><input type="checkbox" id="noRu"> Russischen Ursprung ausblenden</label>
+    </div>
+  </div>
+
+  <div class="ledger" id="ledger">
+
+    <article class="sup" data-status="eu" data-origin="ru">
+      <div class="cc">BG</div>
+      <div class="body">
+        <div class="name"><h3>shop.uazbg.com</h3><span class="co">ET „Karbon – Aleksandar Atanasov“, Plewen</span></div>
+        <dl class="offer">
+          <dt>Gelistet</dt><dd>„Лагери основни КАМАЗ – 2 рем. Оригинал“ (Hauptlager, Reparaturstufe 2, kein Normalmaß) <span class="price">73,63 €</span></dd>
+          <dt>Normalmaß</dt><dd>Nicht im Shop gelistet; Ihr Foto zeigt aber ДЗВ <span class="mono">740.60Д-1000104</span> aus diesem Shop</dd>
+          <dt>Versand</dt><dd>Laut Shop in alle Länder Europas, per Speedy/DPD Economy oder Interlogistica; Versandkosten nennt der Shop per E-Mail</dd>
+          <dt>Zahlung</dt><dd>Überweisung in EUR (IBAN) oder PayPal</dd>
+        </dl>
+        <p class="next"><b>Nächster Schritt:</b> Normalmaß für beide Sätze anfragen und nach einem Satz nicht-russischer Herstellung fragen. Shop hat deutsche Oberfläche.</p>
+      </div>
+      <div class="side">
+        <span class="pill eu">Versand EU bestätigt</span>
+        <span class="origin ru">Herkunft Russland (ДЗВ)</span>
+        <div class="contact">
+          <div class="row"><span class="val">karbon3@abv.bg</span><button class="copy" type="button" data-copy="karbon3@abv.bg">Kopieren</button></div>
+          <div class="row"><span class="val">+359 895 561 251</span><button class="copy" type="button" data-copy="+359895561251">Kopieren</button></div>
+        </div>
+        <div class="links"><a href="https://shop.uazbg.com/de-catalog-details-47.html" target="_blank" rel="noopener">KamAZ-Kategorie</a><a href="https://shop.uazbg.com/de-content-details-4.html" target="_blank" rel="noopener">Versandbedingungen</a></div>
+      </div>
+    </article>
+
+    <article class="sup" data-status="eu" data-origin="unk">
+      <div class="cc">PL</div>
+      <div class="body">
+        <div class="name"><h3>zychar.pl</h3><span class="co">ZYCHAR TRADE Sp. z o.o.</span></div>
+        <dl class="offer">
+          <dt>Gelistet</dt><dd>KamAZ-Kategorie und Motor-Reparatursätze „Kamaz (120 mm)“; Lagerschalen bei meiner Suche nicht gefunden</dd>
+          <dt>Versand</dt><dd>Shop auf Deutsch, Bearbeitung 1–3 Werktage; Lieferung nach DE <span class="tag w">[Wahrscheinlich]</span></dd>
+        </dl>
+        <p class="next"><b>Nächster Schritt:</b> Telefonisch nach <span class="mono">7405.1000102 / 1000104</span> Normalmaß fragen; als polnischer Händler kann er ggf. aus der Ukraine beschaffen.</p>
+      </div>
+      <div class="side">
+        <span class="pill eu">Versand DE möglich</span>
+        <span class="origin unk">Herkunft unbekannt</span>
+        <div class="contact">
+          <div class="row"><span class="val">+48 459 599 770</span><button class="copy" type="button" data-copy="+48459599770">Kopieren</button></div>
+        </div>
+        <div class="links"><a href="https://zychar.pl/sklep/10917-kamaz" target="_blank" rel="noopener">KamAZ-Kategorie</a></div>
+      </div>
+    </article>
+
+    <article class="sup" data-status="inland" data-origin="nru">
+      <div class="cc">UA</div>
+      <div class="body">
+        <div class="name"><h3>kamteh.ua (КамТех)</h3><span class="co">Charkiw, Automarkt „ЛОСК“</span></div>
+        <dl class="offer">
+          <dt>Hauptlager</dt><dd>FORSO <span class="mono">7405-1000102</span> Р0 <span class="price">2.875 ₴ ≈ 55 €</span></dd>
+          <dt>Pleuellager</dt><dd>FORSO <span class="mono">7405-1000104</span> Р0 <span class="price">3.910 ₴ ≈ 75 €</span></dd>
+          <dt>Auch</dt><dd>ДЗВ-Sätze (Russland) in Reparaturmaßen; FORSO-Sätze mit 6 Monaten Garantie laut Shop</dd>
+          <dt>Versand</dt><dd>Laut Shop nur Ukraine (Nova Poshta, SAT, Delivery); Kartenzahlung nur, wenn Karteninhaber gleich Empfänger</dd>
+        </dl>
+        <p class="next"><b>Nächster Schritt:</b> Bester Treffer für Normalmaß nicht-russischer Marke. Per E-Mail nach Versand via Nova Post nach Deutschland und Bezahlung per Auslandsüberweisung fragen. FORSO-Herkunftsland nennt der Shop nicht, also mit abfragen.</p>
+      </div>
+      <div class="side">
+        <span class="pill inland">Normalmaß gelistet · nur Inland</span>
+        <span class="origin nru">Marke FORSO, nicht ДЗВ</span>
+        <div class="contact">
+          <div class="row"><span class="val">kamzteh@gmail.com</span><button class="copy" type="button" data-copy="kamzteh@gmail.com">Kopieren</button></div>
+          <div class="row"><span class="val">+380 50 058 71 74</span><button class="copy" type="button" data-copy="+380500587174">Kopieren</button></div>
+        </div>
+        <div class="links"><a href="https://kamteh.ua/product/vkladyshi-r0-korennye-dlya-kamaz-7405-1000102-forso-motors-england" target="_blank" rel="noopener">Hauptlager Р0</a><a href="https://kamteh.ua/product/vkladyshi-r0-shatunnye-dlya-kamaz-7405-1000104-forso-motors-england" target="_blank" rel="noopener">Pleuellager Р0</a><a href="https://kamteh.ua/page/delivery" target="_blank" rel="noopener">Versand</a></div>
+      </div>
+    </article>
+
+    <article class="sup" data-status="offen" data-origin="nru">
+      <div class="cc">UA</div>
+      <div class="body">
+        <div class="name"><h3>zs.in.ua</h3><span class="co">Teilehändler Ukraine</span></div>
+        <dl class="offer">
+          <dt>Hauptlager</dt><dd><span class="mono">7405.1000102</span> Р0 Standard, Federal-Mogul-Technologie, Hersteller China; Zapfen <span class="mono">94,985–95,015 mm</span>; für KamAZ-740, 740.30, 7405, 740.51, 740.60 (Euro 0–2)</dd>
+          <dt>Preis</dt><dd>Nicht erfasst</dd>
+          <dt>Versand</dt><dd>Nicht geprüft</dd>
+        </dl>
+        <p class="next"><b>Nächster Schritt:</b> Einziger Fund mit ausdrücklich chinesischer Herstellung. Preis, Pleuellager-Gegenstück und Auslandsversand anfragen.</p>
+      </div>
+      <div class="side">
+        <span class="pill offen">Normalmaß gelistet · Versand ungeklärt</span>
+        <span class="origin nru">Herkunft China</span>
+        <div class="links"><a href="https://zs.in.ua/products/federal-mogul-74051000102ct" target="_blank" rel="noopener">Produktseite</a></div>
+      </div>
+    </article>
+
+    <article class="sup" data-status="inland" data-origin="unk">
+      <div class="cc">BG</div>
+      <div class="body">
+        <div class="name"><h3>tehnochast.com</h3><span class="co">Pasardschik</span></div>
+        <dl class="offer">
+          <dt>Hauptlager</dt><dd><span class="mono">740.1000102</span> Normalmaß <span class="price">26,59 €</span></dd>
+          <dt>Versand</dt><dd>Nur Econt Express innerhalb Bulgariens (frühere Prüfung)</dd>
+        </dl>
+        <p class="next"><b>Nächster Schritt:</b> Günstigster Preis. Nur sinnvoll, wenn der Shop einmalig per Speedy/DPD versendet oder ein Bekannter in Bulgarien weiterschickt. Hersteller erfragen.</p>
+      </div>
+      <div class="side">
+        <span class="pill inland">Normalmaß gelistet · nur Inland</span>
+        <span class="origin unk">Hersteller nicht genannt</span>
+        <div class="contact">
+          <div class="row"><span class="val">tehno_parts@abv.bg</span><button class="copy" type="button" data-copy="tehno_parts@abv.bg">Kopieren</button></div>
+          <div class="row"><span class="val">+359 878 443 690</span><button class="copy" type="button" data-copy="+359878443690">Kopieren</button></div>
+        </div>
+        <div class="links"><a href="https://tehnochast.com/bg-product-details-7429.html" target="_blank" rel="noopener">Produktseite</a></div>
+      </div>
+    </article>
+
+    <article class="sup" data-status="inland" data-origin="unk">
+      <div class="cc">UA</div>
+      <div class="body">
+        <div class="name"><h3>skiff.org.ua (СКИФ)</h3><span class="co">Teilehändler Ukraine</span></div>
+        <dl class="offer">
+          <dt>Gelistet</dt><dd>Lagerschalen KamAZ 740, <span class="mono">7405-1000102</span> und <span class="mono">7405-1000104</span>; Größen und Hersteller nicht erfasst</dd>
+          <dt>Versand</dt><dd>Laut Shop in die ganze Ukraine</dd>
+        </dl>
+        <p class="next"><b>Nächster Schritt:</b> Als Ausweichquelle zu kamteh.ua anfragen.</p>
+      </div>
+      <div class="side">
+        <span class="pill inland">Nur Inland</span>
+        <span class="origin unk">Herkunft unbekannt</span>
+        <div class="links"><a href="https://skiff.org.ua/vkladishi_kamaz_740" target="_blank" rel="noopener">Kategorie</a></div>
+      </div>
+    </article>
+
+    <article class="sup" data-status="offen" data-origin="unk">
+      <div class="cc">CZ</div>
+      <div class="body">
+        <div class="name"><h3>kmotorshop.com</h3><span class="co">K-Motorshop</span></div>
+        <dl class="offer">
+          <dt>Gelistet</dt><dd>KamAZ-740-Teile (Kolbenringsätze MAHLE, Anlasser), keine Lagerschalen (frühere Prüfung)</dd>
+          <dt>Versand</dt><dd>Liefert nach Deutschland (frühere Prüfung)</dd>
+        </dl>
+        <p class="next"><b>Nächster Schritt:</b> Fragen, ob sie Lagerschalen beschaffen; ein EU-Händler mit Rechnung löst das Versandproblem.</p>
+      </div>
+      <div class="side">
+        <span class="pill offen">Teil nicht gelistet</span>
+        <span class="origin unk">–</span>
+        <div class="contact">
+          <div class="row"><span class="val">info@kmotorshop.com</span><button class="copy" type="button" data-copy="info@kmotorshop.com">Kopieren</button></div>
+          <div class="row"><span class="val">+420 475 209 033</span><button class="copy" type="button" data-copy="+420475209033">Kopieren</button></div>
+        </div>
+        <div class="links"><a href="https://www.kmotorshop.com/en/article-list/list/motor/24482" target="_blank" rel="noopener">KamAZ 740</a></div>
+      </div>
+    </article>
+
+    <article class="sup" data-status="offen" data-origin="unk">
+      <div class="cc">LT</div>
+      <div class="body">
+        <div class="name"><h3>SBE / hard-steel.biz</h3><span class="co">Ersatzteilhandel, Lager in Litauen</span></div>
+        <dl class="offer">
+          <dt>Gelistet</dt><dd>KamAZ-Sortiment als Excel-Liste; laut Suchtreffer weltweiter Versand aus Litauen</dd>
+          <dt>Prüfung</dt><dd>Seite war für mich nicht lesbar, Angaben unbestätigt</dd>
+        </dl>
+        <p class="next"><b>Nächster Schritt:</b> Sortimentsliste ansehen und Lagerschalen anfragen.</p>
+      </div>
+      <div class="side">
+        <span class="pill offen">Unbestätigt</span>
+        <span class="origin unk">Herkunft unbekannt</span>
+        <div class="links"><a href="https://www.hard-steel.biz/spare-parts-sbe-categories/kamaz-spare-parts-detail" target="_blank" rel="noopener">KamAZ-Seite</a></div>
+      </div>
+    </article>
+
+    <article class="sup" data-status="offen" data-origin="nru">
+      <div class="cc">ME</div>
+      <div class="body">
+        <div class="name"><h3>Daido Metal Kotor AD</h3><span class="co">Gleitlagerhersteller, Kotor, Montenegro</span></div>
+        <dl class="offer">
+          <dt>Profil</dt><dd>Teil der japanischen Daido-Metal-Gruppe; fertigt Halbschalen, Buchsen und Anlaufscheiben, überwiegend als Erstausrüstung</dd>
+          <dt>Chance</dt><dd>Gering für Einzelsätze <span class="tag v">[Vermutung]</span>; das Schwesterwerk Daido Metal Russia fertigt KamAZ-Sätze</dd>
+        </dl>
+        <p class="next"><b>Nächster Schritt:</b> Nur als letzte Option: fragen, ob ein Satz <span class="mono">7405.1000102</span> Normalmaß ab Werk oder über einen EU-Händler erhältlich ist.</p>
+      </div>
+      <div class="side">
+        <span class="pill offen">Hersteller, kein Shop</span>
+        <span class="origin nru">Herkunft Montenegro</span>
+        <div class="contact">
+          <div class="row"><span class="val">daido@t-com.me</span><button class="copy" type="button" data-copy="daido@t-com.me">Kopieren</button></div>
+          <div class="row"><span class="val">+382 32 331 513</span><button class="copy" type="button" data-copy="+38232331513">Kopieren</button></div>
+        </div>
+        <div class="links"><a href="https://ecatalogue.wb6cif.eu/daido/" target="_blank" rel="noopener">Firmenprofil</a></div>
+      </div>
+    </article>
+
+    <p class="empty" id="emptyNote" hidden>Kein Händler passt zu diesem Filter.</p>
+  </div>
+
+  <div class="more">
+    <h3>Weitere ukrainische Händler, nur Teil-Treffer</h3>
+    <ul>
+      <li><a href="https://agroteh.org.ua/ru/pidshypnyky-kovzannya/vkladyshi-korennye-kamaz-740-60d-1000102-r01-d-94-75-federal-mogul" target="_blank" rel="noopener">agroteh.org.ua</a>: <span class="mono">740.60Д-1000102</span> Р01, Ø 94,75 mm, Federal-Mogul. Zwischenmaß, kein Normalmaß.</li>
+      <li><a href="https://agrozon.com.ua/ru/products/vkladyshi-korennye-kamaz-7405.1000102-r1-d94.50" target="_blank" rel="noopener">agrozon.com.ua</a>: <span class="mono">7405.1000102</span> Р1, Ø 94,50 mm, 1.326 ₴. Reparaturmaß.</li>
+      <li><a href="https://kamaz.keytostart.com.ua/vse-tovary/detali-dvigatelya/vkladyshy-kolenvala-kamaz/" target="_blank" rel="noopener">kamaz.keytostart.com.ua</a> (Шеф-Механик): ДЗВ-Sätze, Russland.</li>
+      <li><a href="https://prom.ua/Vkladyshi-korennye-kamaz-740.html" target="_blank" rel="noopener">prom.ua</a>: Marktplatz mit über 500 Angeboten zu KamAZ-740-Hauptlagern; Verkäufer einzeln nach Auslandsversand fragen.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="route" aria-labelledby="h-route">
+  <div class="eyebrow">Versandweg Ukraine → Deutschland</div>
+  <h2 id="h-route">So kommt ein ukrainischer Satz zu Ihnen</h2>
+  <ol class="steps">
+    <li><span class="tag s">[Sicher]</span> Nova Post, der Auslandsdienst von Nova Poshta, betreibt Filialen in Deutschland und arbeitet hier mit DPD zusammen. Sendungen aus der Ukraine brauchen laut Unternehmen drei Tage oder mehr.</li>
+    <li>Bitten Sie den Händler, international über Nova Post an Ihre deutsche Adresse zu versenden, und zahlen Sie per Auslandsüberweisung. Inlands-Nachnahme funktioniert für Sie nicht.</li>
+    <li><span class="tag s">[Sicher]</span> Die Ukraine ist kein EU-Land: Es fallen Einfuhrumsatzsteuer und laut TARIC bis zu 3,4 % Drittlandszoll auf KN <span class="mono">8483 30 80</span> an. Ob eine Zollpräferenz für ukrainische Ware greift, habe ich nicht geprüft.</li>
+    <li>Rechnung mit Hersteller und Ursprungsland beilegen lassen. Das hilft beim Zoll und bei der Frage nach russischem Ursprung.</li>
+  </ol>
+</section>
+
+<section aria-labelledby="h-ref" style="display:grid;gap:16px">
+  <div class="eyebrow">Referenz</div>
+  <h2 id="h-ref">Teilenummern und Maße</h2>
+  <div class="ref">
+    <div class="panel">
+      <h3>Welche Nummer passt</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Nummer</th><th>Bedeutung</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">740.1000102</td><td>Hauptlagersatz, alte Katalognummer</td></tr>
+          <tr><td class="mono">7405.1000102</td><td>Hauptlagersatz, heutige Nummer für KamAZ-740 bis Euro 2</td></tr>
+          <tr><td class="mono">740.60Д-1000102</td><td>Gegenstück der Euro-0–2-Sätze, im Handel als Analog zu 7405 geführt <span class="tag w">[Wahrscheinlich]</span></td></tr>
+          <tr><td class="mono">740.1000104 / 7405.1000104</td><td>Pleuellagersatz, gleiche Logik</td></tr>
+          <tr><td class="mono">740.71R / 740.71Д</td><td>Euro 3–5. Nicht für Ihren Motor kaufen.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel">
+      <h3>Maß vor Code</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Hauptlagerzapfen</th><th>Bezeichnung</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Ø 95,00</td><td>Normalmaß: Р0 / СТ / STD</td></tr>
+          <tr><td class="mono">Ø 94,75</td><td>Р01, Zwischenmaß</td></tr>
+          <tr><td class="mono">Ø 94,50</td><td>Р1 (Händlerangabe)</td></tr>
+          <tr><td class="mono">Ø 100,0</td><td>Lagergasse im Block (Р0)</td></tr>
+        </tbody>
+      </table></div>
+      <p class="warnline">Der Hersteller МЗПС bezeichnet Ø 95,00 als „Р3“. Bestellen Sie deshalb immer mit Durchmesser, nie nur mit dem Größencode. Und messen Sie die Zapfen vorher: Ist die Welle schon geschliffen, passt Normalmaß nicht.</p>
+    </div>
+  </div>
+</section>
+
+<section class="tpl" aria-labelledby="h-tpl">
+  <div class="eyebrow">Anfrage</div>
+  <h2 id="h-tpl">Textvorlage für die Händler</h2>
+  <div class="tpl-tabs" role="group" aria-label="Sprache der Vorlage">
+    <button class="chip" type="button" data-lang="en" aria-pressed="true">Englisch</button>
+    <button class="chip" type="button" data-lang="uk" aria-pressed="false">Ukrainisch</button>
+    <button class="chip" type="button" data-lang="de" aria-pressed="false">Deutsch</button>
+  </div>
+  <pre id="tplText"></pre>
+  <div class="bar"><button class="btn" type="button" id="tplCopy">Text kopieren</button><span class="status" id="tplStatus" aria-live="polite"></span></div>
+</section>
+
+<section class="sources" aria-labelledby="h-src" style="display:grid;gap:10px">
+  <div class="eyebrow">Quellen</div>
+  <h2 id="h-src">Belege</h2>
+  <ol>
+    <li><a href="https://blogs.pwc.de/de/steuern-und-recht/article/253051/eugh-zum-verbot-der-einfuhr-von-in-russland-erworbenen-guetern-in-die-eu/" target="_blank" rel="noopener">PwC: EuGH zum Einfuhrverbot nach Art. 3i VO 833/2014</a></li>
+    <li><a href="https://www.zolltarifnummern.de/2026/84833080" target="_blank" rel="noopener">zolltarifnummern.de: KN 8483 30 80, Maßnahmen 2026</a></li>
+    <li><a href="https://interfax.com/newsroom/top-stories/79851/" target="_blank" rel="noopener">Interfax: KAMAZ im sechsten EU-Sanktionspaket</a></li>
+    <li><a href="https://sanctions.blackseanews.net/en/entry/1013" target="_blank" rel="noopener">Sanktionsregister: KAMAZ PJSC, EU-VO 269/2014 und 833/2014</a></li>
+    <li><a href="https://shop.uazbg.com/de-content-details-4.html" target="_blank" rel="noopener">shop.uazbg.com: Versand und Zahlung</a></li>
+    <li><a href="https://kamteh.ua/kamaz-vkladyshi" target="_blank" rel="noopener">kamteh.ua: Lagerschalen KamAZ</a> · <a href="https://kamteh.ua/page/delivery" target="_blank" rel="noopener">Versand</a> · <a href="https://kamteh.ua/page/forso" target="_blank" rel="noopener">Marke FORSO</a></li>
+    <li><a href="https://zs.in.ua/products/federal-mogul-74051000102ct" target="_blank" rel="noopener">zs.in.ua: 7405.1000102 Р0, Federal-Mogul, China</a></li>
+    <li><a href="https://prom.ua/Vkladyshi-kamaz-740.html" target="_blank" rel="noopener">prom.ua: Р0 Ø 95,0 / Lagergasse Ø 100,0; Р01 Ø 94,75</a> · <a href="https://prom.ua/Vkladyshi-mzps.html" target="_blank" rel="noopener">МЗПС-Bezeichnungen</a></li>
+    <li><a href="https://www.kamazik.ru/zp/gruppa_10_dvigatel/vkladyshi_shatunnye_nominal_analog_7405_1000104/" target="_blank" rel="noopener">Katalogeintrag: 740.60Д-1000104 als Analog zu 7405.1000104</a></li>
+    <li><a href="https://ecatalogue.wb6cif.eu/daido/" target="_blank" rel="noopener">Daido Metal Kotor: Firmenprofil</a> · <a href="https://www.marklines.com/en/top500/daido-metal" target="_blank" rel="noopener">Daido Metal Russia (ehem. ZMZ-Bearings)</a></li>
+    <li><a href="https://en.interfax.com.ua/news/telecom/1190693.html" target="_blank" rel="noopener">Interfax-Ukraine: Nova Post Standorte in Deutschland</a> · <a href="https://www.paketda.de/tracking/nova-post.html" target="_blank" rel="noopener">paketda: Nova Post und DPD</a></li>
+    <li><a href="https://wise.com/us/currency-converter/eur-to-uah-rate/history" target="_blank" rel="noopener">Wise: Kurs EUR/UAH ≈ 51,85 (August 2026), Basis der Euro-Werte</a></li>
+  </ol>
+</section>
+
+<footer>Preise und Verfügbarkeit laut Shopseiten am Recherchetag; „Frühere Prüfung“ heißt: aus einer früheren Recherche in diesem Projekt, heute nicht erneut geprüft. Ungarn, Rumänien, Serbien und eBay lieferten keine Treffer.</footer>
+</div>
+
+<script>
+(function(){
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.sup'));
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.filters .chip'));
+  var noRu = document.getElementById('noRu');
+  var empty = document.getElementById('emptyNote');
+  var current = 'all';
+  document.getElementById('countAll').textContent = cards.length;
+
+  function apply(){
+    var shown = 0;
+    cards.forEach(function(c){
+      var ok = (current === 'all' || c.dataset.status === current) && !(noRu.checked && c.dataset.origin === 'ru');
+      c.hidden = !ok; if(ok) shown++;
+    });
+    empty.hidden = shown !== 0;
+  }
+  chips.forEach(function(ch){
+    ch.addEventListener('click', function(){
+      current = ch.dataset.f;
+      chips.forEach(function(x){ x.setAttribute('aria-pressed', x === ch ? 'true' : 'false'); });
+      apply();
+    });
+  });
+  noRu.addEventListener('change', apply);
+
+  function copyText(text, onDone){
+    try{
+      navigator.clipboard.writeText(text).then(function(){ onDone(true); }, function(){ onDone(false); });
+    }catch(e){ onDone(false); }
+  }
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click', function(){
+      copyText(b.dataset.copy, function(ok){
+        if(ok){ b.textContent = 'Kopiert'; setTimeout(function(){ b.textContent = 'Kopieren'; }, 1500); }
+        else{
+          var val = b.parentNode.querySelector('.val');
+          var r = document.createRange(); r.selectNodeContents(val);
+          var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+          b.textContent = 'Markiert';
+        }
+      });
+    });
+  });
+
+  var tpl = {
+    en: "Subject: KamAZ-740 bearing shells, standard size, shipping to Germany\n\nHello,\n\nI need for a KamAZ-740 engine (Ural-4320):\n- 1 set of crankshaft main bearing shells 7405.1000102, standard size (P0 / STD, journal Ø 95.00 mm)\n- 1 set of connecting rod bearing shells 7405.1000104, standard size (P0 / STD)\n\nCan you ship to Germany (e.g. Nova Post international, DHL or DPD)?\nPlease send me:\n1. total price including shipping\n2. payment options (bank transfer / PayPal)\n3. manufacturer and country of origin of the shells\n\nI prefer shells not made in Russia, if available.\n\nThank you and best regards",
+    uk: "Тема: Вкладиші КамАЗ-740, стандарт, доставка до Німеччини\n\nДобрий день!\n\nДля двигуна КамАЗ-740 (Урал-4320) мені потрібні:\n- 1 комплект корінних вкладишів 7405.1000102, стандарт (Р0, шийка Ø 95,00 мм)\n- 1 комплект шатунних вкладишів 7405.1000104, стандарт (Р0)\n\nЧи можете ви відправити до Німеччини (Нова пошта / Nova Post міжнародна доставка, DHL або DPD)?\nПрошу вказати:\n1. загальну вартість з доставкою\n2. способи оплати (банківський переказ з-за кордону)\n3. виробника та країну походження вкладишів\n\nПо можливості — вкладиші не російського виробництва (наприклад FORSO).\n\nДякую! З повагою",
+    de: "Betreff: Lagerschalen KamAZ-740, Normalmaß, Versand nach Deutschland\n\nGuten Tag,\n\nfür einen Motor KamAZ-740 (Ural-4320) benötige ich:\n- 1 Satz Hauptlagerschalen 7405.1000102, Normalmaß (Р0 / STD, Zapfen Ø 95,00 mm)\n- 1 Satz Pleuellagerschalen 7405.1000104, Normalmaß (Р0 / STD)\n\nKönnen Sie nach Deutschland versenden?\nBitte nennen Sie mir:\n1. Gesamtpreis inklusive Versand\n2. Zahlungsmöglichkeiten\n3. Hersteller und Ursprungsland der Lagerschalen\n\nWenn möglich bevorzuge ich Lagerschalen, die nicht in Russland hergestellt wurden.\n\nVielen Dank und freundliche Grüße"
+  };
+  var tplText = document.getElementById('tplText');
+  var tplStatus = document.getElementById('tplStatus');
+  var langChips = Array.prototype.slice.call(document.querySelectorAll('.tpl-tabs .chip'));
+  function setLang(l){
+    tplText.textContent = tpl[l];
+    langChips.forEach(function(x){ x.setAttribute('aria-pressed', x.dataset.lang === l ? 'true' : 'false'); });
+    tplStatus.textContent = '';
+  }
+  langChips.forEach(function(ch){ ch.addEventListener('click', function(){ setLang(ch.dataset.lang); }); });
+  setLang('en');
+  document.getElementById('tplCopy').addEventListener('click', function(){
+    copyText(tplText.textContent, function(ok){
+      if(ok){ tplStatus.textContent = 'In die Zwischenablage kopiert'; }
+      else{
+        var r = document.createRange(); r.selectNodeContents(tplText);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        tplStatus.textContent = 'Text markiert, bitte manuell kopieren';
+      }
+    });
+  });
+  apply();
+})();
+</script>
+
+</body>
+</html>
